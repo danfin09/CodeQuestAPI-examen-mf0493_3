@@ -3,6 +3,7 @@ const { connectDB } = require("./utils/db");
 const dotenv = require("dotenv");
 const indexRouter = require("./routes/index.routes");
 const apiRouter = require("./routes/api.routes");
+const MONGODB_URI = process.env.MONGODB_URI;
 
 dotenv.config();
 

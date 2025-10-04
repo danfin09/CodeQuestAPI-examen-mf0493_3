@@ -42,10 +42,17 @@ describe('Testing about "/api/v1/questions/random" endpoint', () => {
 
         if (data.results[0].status) {
             expect(['approved', 'pending']).toContain(data.results[0].status); // Ensure status is one of the expected values
+
+			expect(data.results[0].codeExamples).toBeDefined();
+
         }
 /*         if (data.results[0].urlSource) {
             expect(typeof data.results[0].urlSource).toBe('string'); // Ensure urlSource is a string
         } */
+
+			expect(data.results[0].explanation).toBeDefined();
+			
+		
 
 		expect(data.results[0]).toMatchObject(mockQuestionModel);
 	})
