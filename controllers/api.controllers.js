@@ -23,7 +23,7 @@ const { generateQuestions, getRandomQuestionsDB } = require('../services/questio
  */
 const getRandomQuestions = async (req, res) => {
 	try {
-		let { amount } = req.query;
+		let { amount, difficulty } = req.query;
 		amount = parseInt(amount, 10);
 
 		//validation of amount
@@ -33,7 +33,15 @@ const getRandomQuestions = async (req, res) => {
 			amount = 30;
 		}
 
-		const randomQuestion = await getRandomQuestionsDB(amount);
+		const validDifficulties = ["easy", "medium", "hard"];
+		if (difficulty && !validDifficulties.includes(difficulty)) {
+			return res.status(400).json({
+				message: `Invalid difficulty level. Valid options are: ${validDifficulties.join(", ")}`,
+			});
+		}
+
+
+		const randomQuestion = await getRandomQuestionsDB(amount, difficulty ? { difficulty } : {});
 		
 
 		res.status(200).json({
@@ -53,9 +61,17 @@ const getAiQuestions = async (req, res) => {
 	const topic = req.query.topic || "Frontend and Backend programming";
 	// Parse the "amount" query parameter, setting a default of 1 and ensuring it's between 1 and 10
 	const amount = Math.min(Math.max(parseInt(req.query.amount) || 1, 1), 10);
+	const validDifficulties = ["easy", "medium", "hard"];
+
+	if (difficulty && !validDifficulties.includes(difficulty.toLowerCase())) {
+		return res.status(400).json({
+			message: `Invalid difficulty level. )}`,
+		});
+	}
+
 	try {
 		// Call the generateQuestions service to create the specified number of questions based on the topic
-		const questions = await generateQuestions(topic, amount);
+		const questions = await generateQuestions(topic, amount, difficulty);
 		// Send a successful response with a message and the generated questions
 		return res.status(200).json({
 			message: "Random questions delivered successfully.",
