@@ -10,12 +10,20 @@ dotenv.config();
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(express.static('public'));
 
 app.set('view engine', 'ejs');
 
 app.use("/", indexRouter);
 app.use("/api", apiRouter);
+
+
+app.use((req, res) => {
+  res.status(404).json({
+    message: "Endpoint not found",
+  });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
